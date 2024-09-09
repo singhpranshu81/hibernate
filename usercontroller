@@ -1,0 +1,100 @@
+package com.mph.controller;
+
+
+import org.hibernate.Query;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
+import org.hibernate.cfg.Configuration;
+import org.hibernate.criterion.Restrictions;
+
+import com.mph.entity.User;
+
+import java.util.Iterator;
+import java.util.List;
+import java.util.Scanner;
+import java.util.Set;
+
+import javax.validation.ConstraintViolation;
+import javax.validation.Validation;
+import javax.validation.Validator;
+import javax.validation.ValidatorFactory;
+
+public class UserController {
+
+	SessionFactory sf = new Configuration().configure().buildSessionFactory();
+    Session session = sf.openSession();
+    Transaction txn;
+    User user;
+    Scanner sc = new Scanner(System.in);
+    ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
+    Validator validator = factory.getValidator();
+
+    public void addUser() {
+        user = new User();
+
+        System.out.println("Enter your ID:");
+        Long userId = sc.nextLong();
+        user.setId(userId);
+
+        System.out.println("Enter your First Name:");
+        String firstName = sc.next();
+        user.setFirstName(firstName);
+
+        System.out.println("Enter your Last Name:");
+        String lastName = sc.next();
+        user.setLastName(lastName);
+
+        System.out.println("Enter your Email:");
+        String email = sc.next();
+        user.setEmail(email);
+
+        System.out.println("Enter your Password:");
+        String password = sc.next();
+        user.setPassword(password);
+
+        System.out.println("Enter your Gender (Male/Female/Other):");
+        String gender = sc.next();
+        user.setGender(gender);
+
+        System.out.println("Enter your Date of Birth (YYYY-MM-DD):");
+        String dob = sc.next();
+        user.setDateOfBirth(java.time.LocalDate.parse(dob));
+
+        System.out.println("Enter your Salary:");
+        Double salary = sc.nextDouble();
+        user.setSalary(salary);
+
+        System.out.println("Enter your Phone Number:");
+        String phoneNumber = sc.next();
+        user.setPhoneNumber(phoneNumber);
+
+        System.out.println("Do you accept the Terms (true/false):");
+        Boolean acceptedTerms = sc.nextBoolean();
+        user.setAcceptedTerms(acceptedTerms);
+
+        // Perform validation
+        Set<ConstraintViolation<User>> violations = validator.validate(user);
+
+        if (!violations.isEmpty()) {
+            for (ConstraintViolation<User> violation : violations) {
+                System.out.println(violation.getPropertyPath() + " " + violation.getMessage());
+            }
+        } else {
+            txn = session.beginTransaction();
+            session.save(user);
+            txn.commit();
+            System.out.println("User added successfully!!!");
+        }
+    }
+    public void viewUsers() {
+        session.clear();
+        Query qry = session.createQuery("from User");
+        List<User> userList = qry.list();
+        Iterator i = userList.iterator();
+        while (i.hasNext()) {
+            System.out.println(i.next());
+        }
+    }
+  
+}
