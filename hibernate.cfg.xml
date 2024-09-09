@@ -11,11 +11,11 @@
 		<property name="hibernate.connection.username">root</property>
 		<property name="hibernate.connection.password">root@39</property>
 		<property name="hibernate.dialect">org.hibernate.dialect.MySQL5InnoDBDialect</property>
-		<property name="hibernate.hbm2ddl.auto">create-drop</property>
+		<property name="hibernate.hbm2ddl.auto">update</property>
 		<property name="hibernate.show_sql">true</property>
 		
 		<mapping class="com.mph.entity.Emplyee"/>
 <mapping class="com.mph.entity.Department"/>
-		
+		<mapping class="com.mph.entity.Address"/>
 	</session-factory>
 </hibernate-configuration>
