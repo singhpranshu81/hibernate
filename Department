@@ -2,8 +2,14 @@ package com.mph.entity;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 
 @Entity
+@NamedQueries({
+	@NamedQuery(name="GET_EMP_BY_Deptname",query="from Department d where d.dname= :d")
+	
+})
 public class Department {
 @Id
 private int did;
@@ -24,6 +30,7 @@ public String getDname() {
 public void setDname(String dname) {
 	this.dname = dname;
 }
+
 @Override
 public String toString() {
 	return "Department [did=" + did + ", dname=" + dname + "]";
